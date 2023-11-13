@@ -14,7 +14,7 @@ the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
 # How it works
 
-This application basically uses Quarkus Framework with Java 11 with some other modules known to development community:
+This application basically uses Quarkus Framework with Java 17 with some other modules known to development community:
 
 * Hibernate 5
 * Jackson for JSON
