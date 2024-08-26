@@ -16,8 +16,7 @@ public class ApplicationConfiguration {
     @Produces
     @Singleton
     public Slugify slugify() {
-        Slugify slug = Slugify.builder().build();
-        return slug;
+        return Slugify.builder().build();
     }
 
     @Singleton
