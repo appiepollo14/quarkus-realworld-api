@@ -30,8 +30,13 @@ jobs:
           node-version: 20
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - name: Run integration tests
-        run: |
-          nohup java -jar target/quarkus-app/quarkus-run.jar & sleep 10s          
-          ./collections/run-api-tests.sh
+      - name: Setup K6
+        uses: grafana/setup-k6-action@v1
+      - name: Start app
         shell: bash
+        run: |
+          nohup java -jar target/quarkus-app/quarkus-run.jar & sleep 10s
+      - name: Run local k6 test
+        uses: grafana/run-k6-action@v1
+        with:
+          path: collections/api-test.js
