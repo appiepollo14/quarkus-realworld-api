@@ -24,10 +24,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - name: Set up node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
       - name: Build with Maven
         run: mvn -B package --file pom.xml
       - name: Setup K6
@@ -39,4 +35,4 @@ jobs:
       - name: Run local k6 test
         uses: grafana/run-k6-action@v1
         with:
-          path: collections/api-test.js
+          path: e2e/api-test.js
