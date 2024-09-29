@@ -14,17 +14,17 @@ fi
 
 # Run Maven clean install to build the project
 echo "Running mvn clean install..."
-mvn clean install
+mvn -f ../pom.xml clean install
 
 # Check if the jar file was created successfully
-if [ ! -f target/quarkus-app/quarkus-run.jar ]; then
+if [ ! -f ../target/quarkus-app/quarkus-run.jar ]; then
     echo "Jar file not found! Build may have failed."
     exit 1
 fi
 
 # Start the application
 echo "Starting the application..."
-java -jar target/quarkus-app/quarkus-run.jar > service.log &
+java -jar ../target/quarkus-app/quarkus-run.jar > service.log &
 SERVICE_PROCESS=$!
 
 # Wait for the application to start
@@ -33,7 +33,7 @@ echo "Application started"
 
 # Run k6 e2e tests
 echo "Running k6 e2e tests..."
-k6 run ./e2e/api-test.js
+k6 run ./api-test.js
 
 # Stop the application after tests complete
 kill $SERVICE_PROCESS
