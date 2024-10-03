@@ -14,11 +14,12 @@ the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
 # How it works
 
-This application basically uses Quarkus Framework with Java 17 with some other modules known to development community:
+This application basically uses Quarkus Framework with Java 21 with some other modules known to development community:
 
 * Hibernate 5
 * Jackson for JSON
 * H2 in memory database
+* PostgreSQL database
 * JPA Criteria
 * Auth0 java-jwt
 
@@ -43,8 +44,10 @@ infrastructure/         -> technical details layer
 
 ### Start local server
 
+Make sure, docker is running as the Dev Services will start a PostgreSQL database
+
 ```shell
- ./mvnw compile quarkus:dev
+ ./mvnw quarkus:dev
  ```
 
 The server should be running at http://localhost:8080
@@ -55,10 +58,10 @@ The server should be running at http://localhost:8080
 ./mvnw test 
 ```
 
-### Running postman collection tests
+### Running k6 e2e tests
 
 ```shell
-./collections/run-api-tests.sh
+./e2e/e2e-tests.sh
 ```
 
 ### Building jar file
