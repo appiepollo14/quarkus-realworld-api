@@ -18,7 +18,6 @@ This application basically uses Quarkus Framework with Java 21 with some other m
 
 * Hibernate 5
 * Jackson for JSON
-* H2 in memory database
 * PostgreSQL database
 * JPA Criteria
 * Auth0 java-jwt
@@ -44,7 +43,7 @@ infrastructure/         -> technical details layer
 
 ### Start local server
 
-Make sure, docker is running as the Dev Services will start a PostgreSQL database
+Make sure, docker is running as Dev Services will start a PostgreSQL database
 
 ```shell
  ./mvnw quarkus:dev
@@ -59,6 +58,8 @@ The server should be running at http://localhost:8080
 ```
 
 ### Running k6 e2e tests
+
+Make sure, docker is running as a PostgreSQL container will be started
 
 ```shell
 ./e2e/e2e-tests.sh
@@ -84,11 +85,7 @@ and database engine need to be changed.
 
 ```properties
 # Database configuration
-quarkus.datasource.db-kind=h2
-quarkus.datasource.jdbc.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-quarkus.datasource.jdbc.driver=org.h2.Driver
-quarkus.datasource.username=sa
-quarkus.datasource.password=
+quarkus.datasource.db-kind=postgresql
 ```
 
 ## Help
