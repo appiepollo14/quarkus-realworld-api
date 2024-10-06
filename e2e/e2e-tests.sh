@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# Make sure docker is running
+
+# Function to clean up and stop the PostgreSQL container
+cleanup() {
+    echo "Stopping PostgreSQL container..."
+    docker stop postgres_test_container
+    docker rm postgres_test_container
+    echo "PostgreSQL container stopped and removed."
+
+    echo "Cleaning up environment variables..."
+    unset QUARKUS_DATASOURCE_JDBC_URL
+    unset QUARKUS_DATASOURCE_USERNAME
+    unset QUARKUS_DATASOURCE_PASSWORD
+    echo "Environment variables cleaned up."
+}
+
+# Trap any exit or interrupt signals to ensure cleanup
+trap cleanup EXIT
+
 # Check if mvn is installed
 if ! command -v mvn &> /dev/null; then
     echo "Maven (mvn) is not installed. Please install it and try again."
@@ -21,6 +40,22 @@ if [ ! -f ../target/quarkus-app/quarkus-run.jar ]; then
     echo "Jar file not found! Build may have failed."
     exit 1
 fi
+
+# Run a PostgreSQL 17 container with the specified environment variable
+echo "Starting PostgreSQL 17 container..."
+docker run --name postgres_test_container -e POSTGRES_PASSWORD=123456 -p 5432:5432 -d postgres:17
+
+# Wait for PostgreSQL to be ready
+echo "Waiting for PostgreSQL to start..."
+until docker exec postgres_test_container pg_isready > /dev/null 2>&1; do
+    sleep 1
+done
+echo "PostgreSQL is ready."
+
+# Set environment variables for the application
+export QUARKUS_DATASOURCE_JDBC_URL="jdbc:postgresql://localhost:5432/postgres"
+export QUARKUS_DATASOURCE_USERNAME="postgres"
+export QUARKUS_DATASOURCE_PASSWORD="123456"
 
 # Start the application
 echo "Starting the application..."

@@ -23,7 +23,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn clean package
       - name: Setup K6
         uses: grafana/setup-k6-action@v1
       # Run e2e-tests against PostgreSQL
