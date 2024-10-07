@@ -41,6 +41,13 @@ infrastructure/         -> technical details layer
 
 # Getting started
 
+
+### Grant execute permissions to the Maven wrapper
+
+```shell
+chmod +x ./mvnw 
+```
+
 ### Start local server
 
 Make sure, docker is running as Dev Services will start a PostgreSQL database
@@ -60,6 +67,17 @@ The server should be running at http://localhost:8080
 ### Running k6 e2e tests
 
 Make sure, docker is running as a PostgreSQL container will be started
+
+1. (Recommended) Using [nektos/act](https://github.com/nektos/act):
+
+> [!IMPORTANT]
+> After cloning the repository, make sure to run `dos2unix ./mvnw` if you're using Git Bash. Otherwise, Act might throw an `Error 126`.
+
+```shell
+act --cache-server-addr host.docker.internal
+```
+
+2. Using the local script:
 
 ```shell
 ./e2e/e2e-tests.sh

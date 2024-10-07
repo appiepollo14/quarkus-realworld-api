@@ -7,6 +7,13 @@ on:
 jobs:
   container-job:
     runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    env:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://localhost:5432/postgres
+      QUARKUS_DATASOURCE_USERNAME: postgres
+      QUARKUS_DATASOURCE_PASSWORD: 123456
+
     services:
       postgres:
         image: postgres:17.0-alpine
@@ -14,28 +21,88 @@ jobs:
           - 5432:5432
         env:
           POSTGRES_PASSWORD: 123456
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 21
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Make Maven Wrapper executable
+        run: chmod +x ./mvnw
+
+      - name: Create Maven config
+        run: |
+          mkdir -p .mvn
+          echo "--batch-mode" > .mvn/maven.config
+
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
-      - name: Build with Maven
-        run: mvn clean package
-      - name: Setup K6
-        uses: grafana/setup-k6-action@v1
-      # Run e2e-tests against PostgreSQL
-      - name: Start app
-        env:
-          QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://localhost:5432/postgres
-          QUARKUS_DATASOURCE_USERNAME: postgres
-          QUARKUS_DATASOURCE_PASSWORD: 123456
-        shell: bash
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Package project
+        run: ./mvnw package
+
+      - name: Start and wait for project readiness
         run: |
-          nohup java -jar target/quarkus-app/quarkus-run.jar & sleep 10s
+          nohup java -jar target/quarkus-app/quarkus-run.jar &
+
+          count_requests=0
+          MAX_REQUEST_ATTEMPTS=15
+          HEALTH_CHECK_ENDPOINT="http://localhost:8080/q/health/ready"
+
+          while [ "$count_requests" -lt "$MAX_REQUEST_ATTEMPTS" ]; do
+            count_requests=$((count_requests+1))
+            
+            # Allows curl failures without stopping the script
+            set +e
+            http_code=$(curl "$HEALTH_CHECK_ENDPOINT" \
+              --silent \
+              --output /dev/null \
+              --write-out "%{http_code}")
+            set -e
+
+            curl_exit_code=$?
+
+            if [ $curl_exit_code -ne 0 ]; then
+              echo "Attempt ($count_requests/$MAX_REQUEST_ATTEMPTS): curl failed with exit code $curl_exit_code (could not connect)"
+            fi
+
+            if [ $curl_exit_code -eq 0 ]; then
+              echo "Attempt ($count_requests/$MAX_REQUEST_ATTEMPTS): HTTP $http_code"
+            fi
+
+            if [ "$http_code" -eq 200 ]; then
+              echo "Project is ready!"
+              exit 0
+            fi
+
+            sleep 1
+          done
+
+          echo "Max attempts ($count_requests/$MAX_REQUEST_ATTEMPTS) reached."
+          exit 1
+
+      - name: Setup local k6 test
+        uses: grafana/setup-k6-action@v1
+
       - name: Run local k6 test
         uses: grafana/run-k6-action@v1
         with:
-          path: e2e/api-test.js
+          path: ./e2e/api-test.js
+          # Dummy token for nektos/act. Can't run grafana/run-k6-action locally without it
+          github-token: ${{ github.token || 'dummy-token' }}
+          cloud-run-locally: ${{ github.token == 'dummy-token' && 'false' || 'true' }}
+          cloud-comment-on-pr: ${{ github.token == 'dummy-token' && 'true' || 'false' }}
