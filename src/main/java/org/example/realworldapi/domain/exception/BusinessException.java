@@ -1,6 +1,7 @@
 package org.example.realworldapi.domain.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class BusinessException extends RuntimeException {
 
   private final int code;
