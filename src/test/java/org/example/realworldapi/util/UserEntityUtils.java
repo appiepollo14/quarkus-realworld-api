@@ -1,7 +1,7 @@
 package org.example.realworldapi.util;
 
 import org.example.realworldapi.infrastructure.repository.hibernate.entity.UserEntity;
-import org.mindrot.jbcrypt.BCrypt;
+import io.quarkus.elytron.security.common.BcryptUtil;
 
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ public class UserEntityUtils {
     userEntity.setId(UUID.randomUUID());
     userEntity.setUsername(username);
     userEntity.setEmail(email);
-    userEntity.setPassword(BCrypt.hashpw(userPassword, BCrypt.gensalt()));
+    userEntity.setPassword(BcryptUtil.bcryptHash(userPassword));
     return userEntity;
   }
 
