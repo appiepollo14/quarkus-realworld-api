@@ -3,12 +3,11 @@ package org.example.realworldapi;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Table;
+import jakarta.persistence.metamodel.EntityType;
 import jakarta.transaction.Transactional;
 import org.hibernate.cfg.Configuration;
-import org.reflections.Reflections;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,34 +19,41 @@ public class DatabaseIntegrationTest {
     EntityManager em;
 
     private Set<String> entities = new HashSet<>();
+    private Configuration configuration;
 
     @PostConstruct
     private void init() {
-        Configuration configuration = new Configuration();
-        configEntityClasses(configuration);
+        this.configuration = new Configuration();
+        this.configEntityClasses();
     }
 
-    private void configEntityClasses(Configuration configuration) {
-        Reflections reflections = new Reflections("org.example.realworldapi");
-        reflections
-                .getTypesAnnotatedWith(Entity.class)
-                .forEach(
-                        entity -> {
-                            String tableName = entity.getAnnotation(Table.class).name();
-                            entities.add(tableName);
-                            configuration.addAnnotatedClass(entity);
-                        });
+    private void configEntityClasses() {
+        // Retrieve all managed entity types from the EntityManager's Metamodel
+        Set<EntityType<?>> entityTypes = em.getMetamodel().getEntities();
+
+        for (EntityType<?> entityType : entityTypes) {
+            Class<?> entityClass = entityType.getJavaType();
+
+            // Ensure the class is annotated with @Table to retrieve the table name
+            Table table = entityClass.getAnnotation(Table.class);
+            if (table != null) {
+                String tableName = table.name();
+                this.entities.add(tableName);
+                this.configuration.addAnnotatedClass(entityClass);
+            } else {
+                // Handle cases where @Table might be missing; optionally use the entity name
+                String tableName = entityType.getName();
+                this.entities.add(tableName);
+                this.configuration.addAnnotatedClass(entityClass);
+            }
+        }
     }
 
     @Transactional
     public void truncate() {
-        entities.forEach(
-                tableName ->
-                        em
-                                .createNativeQuery(
-                                        "TRUNCATE TABLE "
-                                                + tableName
-                                                + " CASCADE;")
-                                .executeUpdate());
+        for (String tableName : this.entities) {
+            this.em.createNativeQuery("TRUNCATE TABLE " + tableName + " CASCADE;")
+              .executeUpdate();
+        }
     }
 }
