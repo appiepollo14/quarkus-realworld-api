@@ -170,8 +170,6 @@ public class UsersResourceIntegrationTest extends AbstractIntegrationTest {
 
     String userPassword = "123";
 
-    final var user = createUserEntity("user1", "user1@mail.com", "bio", "image", userPassword);
-
     LoginRequest loginRequest = new LoginRequest();
     loginRequest.setEmail("user2@mail.com");
     loginRequest.setPassword(userPassword);
