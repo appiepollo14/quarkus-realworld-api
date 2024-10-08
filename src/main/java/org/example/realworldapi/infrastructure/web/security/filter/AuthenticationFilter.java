@@ -1,7 +1,6 @@
 package org.example.realworldapi.infrastructure.web.security.filter;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import jakarta.annotation.Priority;
 import org.example.realworldapi.infrastructure.web.exception.UnauthorizedException;
 import org.example.realworldapi.infrastructure.web.provider.TokenProvider;
@@ -44,12 +43,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
       try {
 
-        DecodedJWT decodedJWT = tokenProvider.verify(token);
+        JsonWebToken decodedJWT = tokenProvider.verify(token);
 
         containerRequestContext.setSecurityContext(
             new DecodedJWTSecurityContext(decodedJWT, tokenProvider));
 
-      } catch (JWTVerificationException ex) {
+      } catch (Exception ex) {
         containerRequestContext.abortWith(
             Response.ok(Response.Status.UNAUTHORIZED.toString())
                 .status(Response.Status.UNAUTHORIZED)

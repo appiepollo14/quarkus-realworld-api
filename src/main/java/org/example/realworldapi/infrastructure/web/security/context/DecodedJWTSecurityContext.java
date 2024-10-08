@@ -1,6 +1,6 @@
 package org.example.realworldapi.infrastructure.web.security.context;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.example.realworldapi.infrastructure.web.provider.TokenProvider;
 import org.example.realworldapi.infrastructure.web.security.profile.Role;
 
@@ -9,10 +9,10 @@ import java.security.Principal;
 
 public class DecodedJWTSecurityContext implements SecurityContext {
 
-  private final DecodedJWT decodedJWT;
+  private final JsonWebToken decodedJWT;
   private final TokenProvider tokenProvider;
 
-  public DecodedJWTSecurityContext(DecodedJWT decodedJWT, TokenProvider tokenProvider) {
+  public DecodedJWTSecurityContext(JsonWebToken decodedJWT, TokenProvider tokenProvider) {
     this.decodedJWT = decodedJWT;
     this.tokenProvider = tokenProvider;
   }
