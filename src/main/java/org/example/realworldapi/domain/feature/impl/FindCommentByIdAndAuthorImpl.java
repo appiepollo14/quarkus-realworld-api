@@ -1,12 +1,11 @@
 package org.example.realworldapi.domain.feature.impl;
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
+import org.example.realworldapi.domain.exception.CommentNotFoundException;
 import org.example.realworldapi.domain.feature.FindCommentByIdAndAuthor;
 import org.example.realworldapi.domain.model.comment.Comment;
 import org.example.realworldapi.domain.model.comment.CommentRepository;
-import org.example.realworldapi.domain.exception.CommentNotFoundException;
-
-import java.util.UUID;
 
 @AllArgsConstructor
 public class FindCommentByIdAndAuthorImpl implements FindCommentByIdAndAuthor {

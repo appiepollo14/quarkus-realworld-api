@@ -1,10 +1,9 @@
 package org.example.realworldapi.domain.model.comment;
 
-import org.example.realworldapi.domain.model.article.Article;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.example.realworldapi.domain.model.article.Article;
 
 public interface CommentRepository {
   void save(Comment comment);

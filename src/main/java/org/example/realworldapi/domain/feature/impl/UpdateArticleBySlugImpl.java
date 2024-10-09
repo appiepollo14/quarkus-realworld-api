@@ -1,5 +1,8 @@
 package org.example.realworldapi.domain.feature.impl;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import org.example.realworldapi.domain.feature.CreateSlugByTitle;
 import org.example.realworldapi.domain.feature.FindArticleBySlug;
@@ -8,10 +11,6 @@ import org.example.realworldapi.domain.model.article.Article;
 import org.example.realworldapi.domain.model.article.ArticleRepository;
 import org.example.realworldapi.domain.model.article.UpdateArticleInput;
 import org.example.realworldapi.domain.validator.ModelValidator;
-
-import java.time.LocalDateTime;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @AllArgsConstructor
 public class UpdateArticleBySlugImpl implements UpdateArticleBySlug {

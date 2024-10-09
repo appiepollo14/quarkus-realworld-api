@@ -1,12 +1,11 @@
 package org.example.realworldapi.application.web.model.response;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.realworldapi.domain.model.tag.Tag;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

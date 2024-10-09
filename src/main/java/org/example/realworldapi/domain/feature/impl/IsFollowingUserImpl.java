@@ -1,10 +1,9 @@
 package org.example.realworldapi.domain.feature.impl;
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.example.realworldapi.domain.feature.IsFollowingUser;
 import org.example.realworldapi.domain.model.user.FollowRelationshipRepository;
-
-import java.util.UUID;
 
 @AllArgsConstructor
 public class IsFollowingUserImpl implements IsFollowingUser {

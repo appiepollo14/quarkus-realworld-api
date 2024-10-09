@@ -1,9 +1,8 @@
 package org.example.realworldapi.domain.model.article;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor

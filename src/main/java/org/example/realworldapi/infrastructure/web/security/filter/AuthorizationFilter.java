@@ -1,10 +1,6 @@
 package org.example.realworldapi.infrastructure.web.security.filter;
 
-import org.example.realworldapi.infrastructure.web.security.profile.Role;
 import jakarta.annotation.Priority;
-import org.example.realworldapi.infrastructure.web.exception.ForbiddenException;
-import org.example.realworldapi.infrastructure.web.security.annotation.Secured;
-
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
@@ -19,6 +15,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import org.example.realworldapi.infrastructure.web.exception.ForbiddenException;
+import org.example.realworldapi.infrastructure.web.security.annotation.Secured;
+import org.example.realworldapi.infrastructure.web.security.profile.Role;
 
 @Secured
 @Provider

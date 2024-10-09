@@ -1,8 +1,7 @@
 package org.example.realworldapi.domain.feature;
 
-import org.example.realworldapi.domain.model.comment.Comment;
-
 import java.util.UUID;
+import org.example.realworldapi.domain.model.comment.Comment;
 
 public interface FindCommentByIdAndAuthor {
   Comment handle(UUID commentId, UUID authorId);

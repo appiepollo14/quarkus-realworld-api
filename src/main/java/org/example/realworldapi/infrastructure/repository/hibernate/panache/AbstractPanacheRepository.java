@@ -1,12 +1,11 @@
 package org.example.realworldapi.infrastructure.repository.hibernate.panache;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import org.example.realworldapi.domain.model.article.FavoriteRelationship;
-import org.example.realworldapi.infrastructure.repository.hibernate.entity.*;
-
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.example.realworldapi.domain.model.article.FavoriteRelationship;
+import org.example.realworldapi.infrastructure.repository.hibernate.entity.*;
 
 public class AbstractPanacheRepository<ENTITY, ID> implements PanacheRepositoryBase<ENTITY, ID> {
 

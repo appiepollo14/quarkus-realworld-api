@@ -1,11 +1,10 @@
 package org.example.realworldapi.infrastructure.web.mapper;
 
-import org.example.realworldapi.application.web.model.response.ErrorResponse;
-
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+import org.example.realworldapi.application.web.model.response.ErrorResponse;
 
 @Provider
 public class BeanValidationExceptionMapper
