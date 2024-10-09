@@ -1,11 +1,10 @@
 package org.example.realworldapi.domain.model.article;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.example.realworldapi.domain.model.user.User;
 import org.example.realworldapi.domain.validator.ModelValidator;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @AllArgsConstructor
 public class ArticleModelBuilder {

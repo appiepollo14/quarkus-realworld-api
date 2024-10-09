@@ -13,26 +13,26 @@ import org.example.realworldapi.infrastructure.web.qualifiers.NoWrapRootValueObj
 @Dependent
 public class ApplicationConfiguration {
 
-    @Produces
-    @Singleton
-    public Slugify slugify() {
-        return Slugify.builder().build();
-    }
+  @Produces
+  @Singleton
+  public Slugify slugify() {
+    return Slugify.builder().build();
+  }
 
-    @Singleton
-    @Produces
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
-        objectMapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
-        objectMapper.registerModule(new JavaTimeModule());
-        return objectMapper;
-    }
+  @Singleton
+  @Produces
+  public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
+    objectMapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+    objectMapper.registerModule(new JavaTimeModule());
+    return objectMapper;
+  }
 
-    @Singleton
-    @Produces
-    @NoWrapRootValueObjectMapper
-    public ObjectMapper noWrapRootValueObjectMapper() {
-        return new ObjectMapper().registerModule(new JavaTimeModule());
-    }
+  @Singleton
+  @Produces
+  @NoWrapRootValueObjectMapper
+  public ObjectMapper noWrapRootValueObjectMapper() {
+    return new ObjectMapper().registerModule(new JavaTimeModule());
+  }
 }

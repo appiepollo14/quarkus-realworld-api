@@ -1,12 +1,11 @@
 package org.example.realworldapi.domain.feature.impl;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.example.realworldapi.domain.feature.FindArticleBySlug;
 import org.example.realworldapi.domain.feature.FindCommentsByArticleSlug;
 import org.example.realworldapi.domain.model.comment.Comment;
 import org.example.realworldapi.domain.model.comment.CommentRepository;
-
-import java.util.List;
 
 @AllArgsConstructor
 public class FindCommentsByArticleSlugImpl implements FindCommentsByArticleSlug {

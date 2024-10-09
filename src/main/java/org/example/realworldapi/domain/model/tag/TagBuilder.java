@@ -1,9 +1,8 @@
 package org.example.realworldapi.domain.model.tag;
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.example.realworldapi.domain.validator.ModelValidator;
-
-import java.util.UUID;
 
 @AllArgsConstructor
 public class TagBuilder {

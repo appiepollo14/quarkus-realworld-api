@@ -1,9 +1,8 @@
 package org.example.realworldapi.util;
 
-import org.example.realworldapi.infrastructure.repository.hibernate.entity.UserEntity;
 import io.quarkus.elytron.security.common.BcryptUtil;
-
 import java.util.UUID;
+import org.example.realworldapi.infrastructure.repository.hibernate.entity.UserEntity;
 
 public class UserEntityUtils {
 

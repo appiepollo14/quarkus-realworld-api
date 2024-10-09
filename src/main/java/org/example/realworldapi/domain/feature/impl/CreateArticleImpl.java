@@ -1,5 +1,6 @@
 package org.example.realworldapi.domain.feature.impl;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.example.realworldapi.domain.feature.CreateArticle;
 import org.example.realworldapi.domain.feature.CreateSlugByTitle;
@@ -7,8 +8,6 @@ import org.example.realworldapi.domain.feature.FindTagsByNameCreateIfNotExists;
 import org.example.realworldapi.domain.feature.FindUserById;
 import org.example.realworldapi.domain.model.article.*;
 import org.example.realworldapi.domain.model.tag.Tag;
-
-import java.util.List;
 
 @AllArgsConstructor
 public class CreateArticleImpl implements CreateArticle {

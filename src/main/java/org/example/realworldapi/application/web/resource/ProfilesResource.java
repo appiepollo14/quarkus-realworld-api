@@ -1,13 +1,5 @@
 package org.example.realworldapi.application.web.resource;
 
-import lombok.AllArgsConstructor;
-import org.example.realworldapi.application.web.resource.utils.ResourceUtils;
-import org.example.realworldapi.domain.feature.FollowUserByUsername;
-import org.example.realworldapi.domain.feature.UnfollowUserByUsername;
-import org.example.realworldapi.domain.model.constants.ValidationMessages;
-import org.example.realworldapi.infrastructure.web.security.annotation.Secured;
-import org.example.realworldapi.infrastructure.web.security.profile.Role;
-
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.ws.rs.*;
@@ -15,6 +7,13 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import lombok.AllArgsConstructor;
+import org.example.realworldapi.application.web.resource.utils.ResourceUtils;
+import org.example.realworldapi.domain.feature.FollowUserByUsername;
+import org.example.realworldapi.domain.feature.UnfollowUserByUsername;
+import org.example.realworldapi.domain.model.constants.ValidationMessages;
+import org.example.realworldapi.infrastructure.web.security.annotation.Secured;
+import org.example.realworldapi.infrastructure.web.security.profile.Role;
 
 @Path("/profiles")
 @AllArgsConstructor

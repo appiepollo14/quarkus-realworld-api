@@ -1,12 +1,11 @@
 package org.example.realworldapi.domain.exception;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import static java.util.Collections.singletonList;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static java.util.Collections.singletonList;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)

@@ -52,6 +52,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
 
+      # Check formatting, exit when incorrect
+      - name: Run Spotless check
+        run: ./mvnw spotless:check
+
       - name: Package project
         run: ./mvnw package
 

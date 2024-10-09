@@ -1,8 +1,7 @@
 package org.example.realworldapi.domain.model.article;
 
-import org.example.realworldapi.domain.model.tag.Tag;
-
 import java.util.List;
+import org.example.realworldapi.domain.model.tag.Tag;
 
 public interface TagRelationshipRepository {
   void save(TagRelationship tagRelationship);

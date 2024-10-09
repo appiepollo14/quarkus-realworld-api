@@ -1,16 +1,15 @@
 package org.example.realworldapi.domain.feature.impl;
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
-import org.example.realworldapi.domain.feature.FindUserById;
-import org.example.realworldapi.domain.feature.UpdateUser;
 import org.example.realworldapi.domain.exception.EmailAlreadyExistsException;
 import org.example.realworldapi.domain.exception.UsernameAlreadyExistsException;
+import org.example.realworldapi.domain.feature.FindUserById;
+import org.example.realworldapi.domain.feature.UpdateUser;
 import org.example.realworldapi.domain.model.user.UpdateUserInput;
 import org.example.realworldapi.domain.model.user.User;
 import org.example.realworldapi.domain.model.user.UserRepository;
 import org.example.realworldapi.domain.validator.ModelValidator;
-
-import java.util.UUID;
 
 @AllArgsConstructor
 public class UpdateUserImpl implements UpdateUser {
