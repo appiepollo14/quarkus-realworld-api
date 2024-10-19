@@ -20,7 +20,6 @@ This application basically uses Quarkus Framework with Java 21 with some other m
 * Jackson for JSON
 * PostgreSQL database
 * JPA Criteria
-* Auth0 java-jwt
 
 ### Project structure:
 
