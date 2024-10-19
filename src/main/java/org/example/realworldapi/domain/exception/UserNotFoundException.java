@@ -1,8 +1,7 @@
 package org.example.realworldapi.domain.exception;
 
-public class UserNotFoundException extends BusinessException {
-
+public class UserNotFoundException extends RuntimeException {
   public UserNotFoundException() {
-    super(1, "user not found");
+    super("user not found");
   }
 }

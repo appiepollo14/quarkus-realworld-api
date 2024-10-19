@@ -17,10 +17,7 @@ public class BeanValidationExceptionMapper
 
     e.getConstraintViolations()
         .iterator()
-        .forEachRemaining(
-            contraint -> {
-              errorResponse.getBody().add(contraint.getMessage());
-            });
+        .forEachRemaining(constraint -> errorResponse.getBody().add(constraint.getMessage()));
 
     return Response.ok(errorResponse).status(422).build();
   }

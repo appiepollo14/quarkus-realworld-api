@@ -1,8 +1,7 @@
 package org.example.realworldapi.domain.exception;
 
-public class EmailAlreadyExistsException extends BusinessException {
-
+public class EmailAlreadyExistsException extends RuntimeException {
   public EmailAlreadyExistsException() {
-    super(3, "email already exists");
+    super("email already exists");
   }
 }
