@@ -16,15 +16,14 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
-public class UsersResourceIntegrationTest extends AbstractIntegrationTest {
+class UsersResourceIntegrationTest extends AbstractIntegrationTest {
 
   private final String USERS_RESOURCE_PATH = API_PREFIX + "/users";
   private final String LOGIN_PATH = USERS_RESOURCE_PATH + "/login";
 
   @Test
-  public void
-      givenAValidUser_whenCallingRegisterUserEndpoint_thenReturnAnUserWithTokenFieldAndCode201()
-          throws JsonProcessingException {
+  void givenAValidUser_whenCallingRegisterUserEndpoint_thenReturnAnUserWithTokenFieldAndCode201()
+      throws JsonProcessingException {
 
     NewUserRequest newUser = new NewUserRequest();
     newUser.setUsername("user");
@@ -56,9 +55,8 @@ public class UsersResourceIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
-  public void
-      givenAPersistedUser_whenCallingRegisterUserEndpointWithExistingEmail_thenReturnCode409()
-          throws JsonProcessingException {
+  void givenAPersistedUser_whenCallingRegisterUserEndpointWithExistingEmail_thenReturnCode409()
+      throws JsonProcessingException {
 
     String userPassword = "123";
 
@@ -80,9 +78,8 @@ public class UsersResourceIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
-  public void
-      givenAPersistedUser_whenCallingRegisterUserEndpointWithExistingUsername_thenReturnCode409()
-          throws JsonProcessingException {
+  void givenAPersistedUser_whenCallingRegisterUserEndpointWithExistingUsername_thenReturnCode409()
+      throws JsonProcessingException {
 
     String userPassword = "123";
 
@@ -104,7 +101,7 @@ public class UsersResourceIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
-  public void givenAnInvalidUser_thenReturnErrorsWith422Code() throws JsonProcessingException {
+  void givenAnInvalidUser_thenReturnErrorsWith422Code() throws JsonProcessingException {
 
     NewUserRequest newUser = new NewUserRequest();
 
@@ -126,7 +123,7 @@ public class UsersResourceIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
-  public void givenAnInvalidEmail_thenReturnErrorsWith422Code() throws JsonProcessingException {
+  void givenAnInvalidEmail_thenReturnErrorsWith422Code() throws JsonProcessingException {
 
     NewUserRequest newUser = new NewUserRequest();
     newUser.setUsername("username");
@@ -148,7 +145,7 @@ public class UsersResourceIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
-  public void givenAInvalidLogin_whenExecuteLoginEndpoint_shouldReturnErrorsWith422Code()
+  void givenAInvalidLogin_whenExecuteLoginEndpoint_shouldReturnErrorsWith422Code()
       throws JsonProcessingException {
 
     LoginRequest loginRequest = new LoginRequest();
@@ -164,7 +161,7 @@ public class UsersResourceIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
-  public void givenAInvalidLoginEmail_whenExecuteLoginEndpoint_shouldReturnUnauthorized()
+  void givenAInvalidLoginEmail_whenExecuteLoginEndpoint_shouldReturnUnauthorized()
       throws JsonProcessingException {
 
     String userPassword = "123";
@@ -184,7 +181,7 @@ public class UsersResourceIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
-  public void givenAInvalidLoginPassword_whenExecuteLoginEndpoint_shouldReturnUnauthorized()
+  void givenAInvalidLoginPassword_whenExecuteLoginEndpoint_shouldReturnUnauthorized()
       throws JsonProcessingException {
 
     final var user = createUserEntity("user1", "user1@mail.com", "123", "bio", "image");
