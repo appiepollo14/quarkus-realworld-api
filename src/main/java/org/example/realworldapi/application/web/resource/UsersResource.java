@@ -1,5 +1,7 @@
 package org.example.realworldapi.application.web.resource;
 
+import io.quarkus.security.UnauthorizedException;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -19,8 +21,7 @@ import org.example.realworldapi.domain.feature.CreateUser;
 import org.example.realworldapi.domain.feature.LoginUser;
 import org.example.realworldapi.domain.model.constants.ValidationMessages;
 import org.example.realworldapi.domain.model.user.User;
-import org.example.realworldapi.infrastructure.web.exception.UnauthorizedException;
-import org.example.realworldapi.infrastructure.web.provider.TokenProvider;
+import org.example.realworldapi.infrastructure.provider.JwtTokenProvider;
 
 @Path("/users")
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class UsersResource {
 
   private final CreateUser createUser;
   private final LoginUser loginUser;
-  private final TokenProvider tokenProvider;
+  @Inject private final JwtTokenProvider tokenProvider;
 
   @POST
   @Transactional

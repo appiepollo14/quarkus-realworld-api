@@ -1,5 +1,7 @@
 package org.example.realworldapi.application.web.resource;
 
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -15,9 +17,7 @@ import org.example.realworldapi.application.web.model.response.UserResponse;
 import org.example.realworldapi.domain.feature.FindUserById;
 import org.example.realworldapi.domain.feature.UpdateUser;
 import org.example.realworldapi.domain.model.constants.ValidationMessages;
-import org.example.realworldapi.infrastructure.web.provider.TokenProvider;
-import org.example.realworldapi.infrastructure.web.security.annotation.Secured;
-import org.example.realworldapi.infrastructure.web.security.profile.Role;
+import org.example.realworldapi.infrastructure.provider.JwtTokenProvider;
 
 @Path("/user")
 @AllArgsConstructor
@@ -25,10 +25,10 @@ public class UserResource {
 
   private final FindUserById findUserById;
   private final UpdateUser updateUser;
-  private final TokenProvider tokenProvider;
+  @Inject JwtTokenProvider tokenProvider;
 
   @GET
-  @Secured({Role.ADMIN, Role.USER})
+  @RolesAllowed({"USER", "ADMIN"})
   @Produces(MediaType.APPLICATION_JSON)
   public Response getUser(@Context SecurityContext securityContext) {
     final var userId = UUID.fromString(securityContext.getUserPrincipal().getName());
@@ -39,7 +39,7 @@ public class UserResource {
 
   @PUT
   @Transactional
-  @Secured({Role.ADMIN, Role.USER})
+  @RolesAllowed({"USER", "ADMIN"})
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response update(

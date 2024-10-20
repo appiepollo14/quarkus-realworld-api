@@ -8,15 +8,15 @@ import jakarta.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import org.example.realworldapi.infrastructure.provider.JwtTokenProvider;
 import org.example.realworldapi.infrastructure.repository.hibernate.entity.*;
-import org.example.realworldapi.infrastructure.web.provider.TokenProvider;
 import org.example.realworldapi.util.UserEntityUtils;
 import org.junit.jupiter.api.AfterEach;
 
 public class AbstractIntegrationTest {
 
   @Inject protected ObjectMapper objectMapper;
-  @Inject protected TokenProvider tokenProvider;
+  @Inject protected JwtTokenProvider tokenProvider;
   @Inject protected Slugify slugify;
   @Inject EntityManager em;
   @Inject DatabaseIntegrationTest db;

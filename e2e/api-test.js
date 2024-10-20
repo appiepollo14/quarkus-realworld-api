@@ -82,7 +82,7 @@ function testAuth() {
     let authToken = response.json('user.token')
     expect(authToken, 'token').to.not.be.null;
     // set the authorization header on the session for the subsequent requests.
-    session.addHeader('Authorization', `Token ${authToken}`)
+    session.addHeader('Authorization', `Bearer ${authToken}`)
   });
   describe('Current User', () => {
 
