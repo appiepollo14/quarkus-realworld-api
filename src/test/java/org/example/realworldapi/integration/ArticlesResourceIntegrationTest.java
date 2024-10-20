@@ -6,19 +6,25 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasKey;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
-import java.util.Arrays;
 import org.apache.http.HttpStatus;
-import org.example.realworldapi.AbstractIntegrationTest;
 import org.example.realworldapi.application.web.model.request.NewArticleRequest;
 import org.example.realworldapi.application.web.model.request.NewCommentRequest;
 import org.example.realworldapi.application.web.model.request.UpdateArticleRequest;
+import org.example.realworldapi.util.IntegrationTestUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
-public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
+@TestTransaction
+public class ArticlesResourceIntegrationTest {
+
+  @Inject ObjectMapper objectMapper;
+  @Inject IntegrationTestUtil integrationTestUtil;
 
   private final String ARTICLES_PATH = API_PREFIX + "/articles";
   private final String FEED_PATH = ARTICLES_PATH + "/feed";
@@ -41,28 +47,34 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       given10ArticlesForLoggedUser_whenExecuteFeedEndpointWithOffset0AndLimit5_shouldReturnListOf5Articles() {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
     final var follower1 =
-        createUserEntity("follower1", "follower1@mail.com", "bio", "image", "follower1_123");
+        integrationTestUtil.createUserEntity(
+            "follower1", "follower1@mail.com", "bio", "image", "follower1_123");
 
-    final var articlesFollower = createArticles(follower1, "Title", "Description", "Body", 10);
+    final var articlesFollower =
+        integrationTestUtil.createArticles(follower1, "Title", "Description", "Body", 10);
 
-    final var tag1 = createTagEntity("Tag 1");
+    final var tag1 = integrationTestUtil.createTagEntity("Tag 1");
 
-    final var tag2 = createTagEntity("Tag 2");
+    final var tag2 = integrationTestUtil.createTagEntity("Tag 2");
 
-    createArticlesTags(articlesFollower, tag1, tag2);
+    integrationTestUtil.createArticlesTags(articlesFollower, tag1, tag2);
 
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
 
-    createArticles(user, "Title", "Description", "Body", 4);
+    integrationTestUtil.createArticles(user, "Title", "Description", "Body", 4);
 
-    follow(loggedUser, follower1);
+    integrationTestUtil.follow(loggedUser, follower1);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .queryParam("offset", 0)
         .queryParam("limit", 5)
         .get(FEED_PATH)
@@ -100,22 +112,27 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       given8ArticlesForLoggedUser_whenExecuteFeedEndpointWithOffset0AndLimit10_shouldReturnListOf8Articles() {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
     final var follower1 =
-        createUserEntity("follower1", "follower1@mail.com", "bio", "image", "follower1_123");
+        integrationTestUtil.createUserEntity(
+            "follower1", "follower1@mail.com", "bio", "image", "follower1_123");
 
-    createArticles(follower1, "Title", "Description", "Body", 8);
+    integrationTestUtil.createArticles(follower1, "Title", "Description", "Body", 8);
 
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
 
-    createArticles(user, "Title", "Description", "Body", 4);
+    integrationTestUtil.createArticles(user, "Title", "Description", "Body", 4);
 
-    follow(loggedUser, follower1);
+    integrationTestUtil.follow(loggedUser, follower1);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .queryParam("offset", 0)
         .queryParam("limit", 10)
         .get(FEED_PATH)
@@ -151,24 +168,29 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       given9ArticlesForLoggedUser_whenExecuteFeedEndpointWithOffset0AndLimit10_shouldReturnListOf9Articles() {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
     final var follower1 =
-        createUserEntity("follower1", "follower1@mail.com", "bio", "image", "follower1_123");
+        integrationTestUtil.createUserEntity(
+            "follower1", "follower1@mail.com", "bio", "image", "follower1_123");
 
-    createArticles(follower1, "Title", "Description", "Body", 5);
+    integrationTestUtil.createArticles(follower1, "Title", "Description", "Body", 5);
 
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
 
-    createArticles(user, "Title", "Description", "Body", 4);
+    integrationTestUtil.createArticles(user, "Title", "Description", "Body", 4);
 
-    follow(loggedUser, follower1);
+    integrationTestUtil.follow(loggedUser, follower1);
 
-    follow(loggedUser, user);
+    integrationTestUtil.follow(loggedUser, user);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .queryParam("offset", 0)
         .queryParam("limit", 10)
         .get(FEED_PATH)
@@ -204,24 +226,29 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       given20ArticlesForLoggedUser_whenExecuteFeedEndpointWithOffset0AndLimit10_shouldReturnListOf10Articles() {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
     final var follower1 =
-        createUserEntity("follower1", "follower1@mail.com", "bio", "image", "follower1_123");
+        integrationTestUtil.createUserEntity(
+            "follower1", "follower1@mail.com", "bio", "image", "follower1_123");
 
-    createArticles(follower1, "Title", "Description", "Body", 2);
+    integrationTestUtil.createArticles(follower1, "Title", "Description", "Body", 2);
 
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
 
-    createArticles(user, "Title", "Description", "Body", 18);
+    integrationTestUtil.createArticles(user, "Title", "Description", "Body", 18);
 
-    follow(loggedUser, follower1);
+    integrationTestUtil.follow(loggedUser, follower1);
 
-    follow(loggedUser, user);
+    integrationTestUtil.follow(loggedUser, user);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .queryParam("offset", 0)
         .queryParam("limit", 10)
         .get(FEED_PATH)
@@ -257,19 +284,22 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       given10ArticlesWithDifferentTags_whenExecuteGlobalArticlesEndpoint_shouldReturn5Articles() {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
-    var articlesLoggedUser = createArticles(loggedUser, "Title", "Description", "Body", 5);
+    var articlesLoggedUser =
+        integrationTestUtil.createArticles(loggedUser, "Title", "Description", "Body", 5);
 
-    final var tag1 = createTagEntity("Tag 1");
+    final var tag1 = integrationTestUtil.createTagEntity("Tag 1");
 
-    createArticlesTags(articlesLoggedUser, tag1);
+    integrationTestUtil.createArticlesTags(articlesLoggedUser, tag1);
 
-    articlesLoggedUser = createArticles(loggedUser, "Title", "Description", "Body", 5);
+    articlesLoggedUser =
+        integrationTestUtil.createArticles(loggedUser, "Title", "Description", "Body", 5);
 
-    final var tag2 = createTagEntity("Tag 2");
+    final var tag2 = integrationTestUtil.createTagEntity("Tag 2");
 
-    createArticlesTags(articlesLoggedUser, tag2);
+    integrationTestUtil.createArticlesTags(articlesLoggedUser, tag2);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
@@ -320,20 +350,28 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
           throws JsonProcessingException {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
-    NewArticleRequest newArticleRequest = createNewArticle("Title", "Description", "Body");
+    NewArticleRequest newArticleRequest =
+        integrationTestUtil.createNewArticle("Title", "Description", "Body");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
-        .body(objectMapper.writeValueAsString(newArticleRequest))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
+        .body(this.objectMapper.writeValueAsString(newArticleRequest))
+        .log()
+        .all()
         .post(ARTICLES_PATH)
         .then()
+        .log()
+        .all()
         .statusCode(HttpStatus.SC_CREATED)
         .body(
             "article.size()",
-            is(10),
+            is(10), // TODO: How can this be 10 if no articles have been created?
             "article",
             hasKey("slug"),
             "article.title",
@@ -362,21 +400,24 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
           throws JsonProcessingException {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
-    final var tag1 = createTagEntity("Tag 1");
-    final var tag2 = createTagEntity("Tag 2");
+    final var tag1 = integrationTestUtil.createTagEntity("Tag 1");
+    final var tag2 = integrationTestUtil.createTagEntity("Tag 2");
     String tag3 = "Tag 3";
     String tag4 = "Tag 4";
 
     final var newArticleRequest =
-        createNewArticle(
+        integrationTestUtil.createNewArticle(
             "Title 1", "Description", "Body", tag1.getName(), tag2.getName(), tag3, tag4);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
-        .body(objectMapper.writeValueAsString(newArticleRequest))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
+        .body(this.objectMapper.writeValueAsString(newArticleRequest))
         .post(ARTICLES_PATH)
         .then()
         .statusCode(HttpStatus.SC_CREATED)
@@ -410,12 +451,16 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       givenExistentArticle_whenExecuteGetArticleBySlugEndpoint_shouldReturnArticleWithStatusCode200() {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
-    final var article = createArticleEntity(loggedUser, "Title", "Description", "Body");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+    final var article =
+        integrationTestUtil.createArticleEntity(loggedUser, "Title", "Description", "Body");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .pathParam("slug", article.getSlug())
         .get(ARTICLES_PATH + "/{slug}")
         .then()
@@ -434,8 +479,10 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       givenExistentArticle_whenExecuteUpdateArticleEndpoint_shouldReturnUpdatedArticleWithStatusCode200()
           throws JsonProcessingException {
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
-    final var article = createArticleEntity(loggedUser, "Title", "Description", "Body");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+    final var article =
+        integrationTestUtil.createArticleEntity(loggedUser, "Title", "Description", "Body");
 
     final var updateArticleRequest = new UpdateArticleRequest();
     updateArticleRequest.setTitle("updated title");
@@ -444,8 +491,10 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
-        .body(objectMapper.writeValueAsString(updateArticleRequest))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
+        .body(this.objectMapper.writeValueAsString(updateArticleRequest))
         .pathParam("slug", article.getSlug())
         .put(ARTICLES_PATH + "/{slug}")
         .then()
@@ -458,7 +507,7 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
             "article.body",
             is(updateArticleRequest.getBody()));
 
-    final var updatedArticleEntity = findArticleEntityById(article.getId());
+    final var updatedArticleEntity = integrationTestUtil.findArticleEntityById(article.getId());
 
     Assertions.assertEquals(updateArticleRequest.getTitle(), updatedArticleEntity.getTitle());
     Assertions.assertEquals(
@@ -469,18 +518,22 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
   @Test
   public void givenExistentArticle_whenExecuteDeleteArticleEndpoint_shouldReturnStatusCode200() {
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
-    final var article = createArticleEntity(loggedUser, "Title", "Description", "Body");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+    final var article =
+        integrationTestUtil.createArticleEntity(loggedUser, "Title", "Description", "Body");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .pathParam("slug", article.getSlug())
         .delete(ARTICLES_PATH + "/{slug}")
         .then()
         .statusCode(HttpStatus.SC_OK);
 
-    Assertions.assertNull(findArticleEntityById(article.getId()));
+    Assertions.assertNull(integrationTestUtil.findArticleEntityById(article.getId()));
   }
 
   @Test
@@ -488,11 +541,13 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       givenExistentArticleWithComments_whenExecuteGetCommentsBySlugEndpoint_shouldReturnCommentWithStatusCode200() {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
-    final var article = createArticleEntity(loggedUser, "Title", "Description", "Body");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+    final var article =
+        integrationTestUtil.createArticleEntity(loggedUser, "Title", "Description", "Body");
 
-    createComment(loggedUser, article, "comment1");
-    createComment(loggedUser, article, "comment2");
+    integrationTestUtil.createComment(loggedUser, article, "comment1");
+    integrationTestUtil.createComment(loggedUser, article, "comment2");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
@@ -521,17 +576,21 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
           throws JsonProcessingException {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
-    final var article = createArticleEntity(loggedUser, "Title", "Description", "Body");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+    final var article =
+        integrationTestUtil.createArticleEntity(loggedUser, "Title", "Description", "Body");
 
     final var newCommentRequest = new NewCommentRequest();
     newCommentRequest.setBody("comment body");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .pathParam("slug", article.getSlug())
-        .body(objectMapper.writeValueAsString(newCommentRequest))
+        .body(this.objectMapper.writeValueAsString(newCommentRequest))
         .post(ARTICLES_PATH + "/{slug}/comments")
         .then()
         .statusCode(HttpStatus.SC_OK)
@@ -555,25 +614,30 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       givenExistentArticleWithComments_whenExecuteDeleteCommentEndpoint_shouldReturnStatusCode200() {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
 
-    final var article = createArticleEntity(user, "Title", "Description", "Body");
+    final var article =
+        integrationTestUtil.createArticleEntity(user, "Title", "Description", "Body");
 
-    final var comment1 = createComment(loggedUser, article, "comment 1 body");
-    createComment(loggedUser, article, "comment 2 body");
+    final var comment1 = integrationTestUtil.createComment(loggedUser, article, "comment 1 body");
+    integrationTestUtil.createComment(loggedUser, article, "comment 2 body");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .pathParam("slug", article.getSlug())
         .pathParam("id", comment1.getId())
         .delete(ARTICLES_PATH + "/{slug}/comments/{id}")
         .then()
         .statusCode(HttpStatus.SC_OK);
 
-    Assertions.assertNull(findCommentEntityById(comment1.getId()));
+    Assertions.assertNull(integrationTestUtil.findCommentEntityById(comment1.getId()));
   }
 
   @Test
@@ -581,15 +645,20 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
       givenExistentArticle_whenExecuteFaroriteArticleEndpoint_shouldReturnFavoritedArticleWithStatusCode200() {
 
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
 
-    final var article = createArticleEntity(user, "Title", "Description", "Body");
+    final var article =
+        integrationTestUtil.createArticleEntity(user, "Title", "Description", "Body");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .pathParam("slug", article.getSlug())
         .post(ARTICLES_PATH + "/{slug}/favorite")
         .then()
@@ -623,21 +692,32 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
   public void
       givenExistentArticleFavorited_whenExecuteUnfaroriteArticleEndpoint_shouldReturnUnfavoritedArticleWithStatusCode200() {
 
+    integrationTestUtil.createNewArticle("Title", "Description", "Body");
+
     final var loggedUser =
-        createUserEntity("loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
+        integrationTestUtil.createUserEntity(
+            "loggedUser", "loggeduser@mail.com", "bio", "image", "loggeduser123");
 
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
 
-    final var article = createArticleEntity(user, "Title", "Description", "Body");
+    final var article =
+        integrationTestUtil.createArticleEntity(user, "title", "Description", "Body");
 
-    favorite(article, loggedUser);
+    integrationTestUtil.favorite(article, loggedUser);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .pathParam("slug", article.getSlug())
+        .log()
+        .all()
         .delete(ARTICLES_PATH + "/{slug}/favorite")
         .then()
+        .log()
+        .all()
         .statusCode(HttpStatus.SC_OK)
         .body(
             "article.size()",
@@ -662,15 +742,5 @@ public class ArticlesResourceIntegrationTest extends AbstractIntegrationTest {
             is(0),
             "article",
             hasKey("author"));
-  }
-
-  private NewArticleRequest createNewArticle(
-      String title, String description, String body, String... tagList) {
-    NewArticleRequest newArticleRequest = new NewArticleRequest();
-    newArticleRequest.setTitle(title);
-    newArticleRequest.setDescription(description);
-    newArticleRequest.setBody(body);
-    newArticleRequest.setTagList(Arrays.asList(tagList));
-    return newArticleRequest;
   }
 }
