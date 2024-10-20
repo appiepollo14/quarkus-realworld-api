@@ -2,6 +2,8 @@ package org.example.realworldapi.application.web.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -23,8 +25,6 @@ import org.example.realworldapi.domain.model.article.ArticleFilter;
 import org.example.realworldapi.domain.model.comment.DeleteCommentInput;
 import org.example.realworldapi.domain.model.constants.ValidationMessages;
 import org.example.realworldapi.infrastructure.web.qualifiers.NoWrapRootValueObjectMapper;
-import org.example.realworldapi.infrastructure.web.security.annotation.Secured;
-import org.example.realworldapi.infrastructure.web.security.profile.Role;
 
 @Path("/articles")
 @AllArgsConstructor
@@ -46,7 +46,7 @@ public class ArticlesResource {
 
   @GET
   @Path("/feed")
-  @Secured({Role.USER, Role.ADMIN})
+  @RolesAllowed({"USER", "ADMIN"})
   @Produces(MediaType.APPLICATION_JSON)
   public Response feed(
       @QueryParam("offset") int offset,
@@ -66,7 +66,7 @@ public class ArticlesResource {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Secured(optional = true)
+  @PermitAll
   public Response getArticles(
       @QueryParam("offset") int offset,
       @QueryParam("limit") int limit,
@@ -89,7 +89,7 @@ public class ArticlesResource {
 
   @POST
   @Transactional
-  @Secured({Role.ADMIN, Role.USER})
+  @RolesAllowed({"USER", "ADMIN"})
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response create(
@@ -118,7 +118,7 @@ public class ArticlesResource {
   @PUT
   @Transactional
   @Path("/{slug}")
-  @Secured({Role.ADMIN, Role.USER})
+  @RolesAllowed({"USER", "ADMIN"})
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response update(
@@ -136,7 +136,7 @@ public class ArticlesResource {
   @DELETE
   @Transactional
   @Path("/{slug}")
-  @Secured({Role.ADMIN, Role.USER})
+  @RolesAllowed({"USER", "ADMIN"})
   @Produces(MediaType.APPLICATION_JSON)
   public Response delete(
       @PathParam("slug") @NotBlank(message = ValidationMessages.SLUG_MUST_BE_NOT_BLANK) String slug,
@@ -148,7 +148,6 @@ public class ArticlesResource {
 
   @GET
   @Path("/{slug}/comments")
-  @Secured(optional = true)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getCommentsBySlug(
       @PathParam("slug") @NotBlank(message = ValidationMessages.SLUG_MUST_BE_NOT_BLANK) String slug,
@@ -165,7 +164,7 @@ public class ArticlesResource {
   @POST
   @Transactional
   @Path("/{slug}/comments")
-  @Secured({Role.ADMIN, Role.USER})
+  @RolesAllowed({"USER", "ADMIN"})
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response createComment(
@@ -183,7 +182,7 @@ public class ArticlesResource {
   @DELETE
   @Transactional
   @Path("/{slug}/comments/{id}")
-  @Secured({Role.ADMIN, Role.USER})
+  @RolesAllowed({"USER", "ADMIN"})
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteComment(
       @PathParam("slug") @NotBlank(message = ValidationMessages.SLUG_MUST_BE_NOT_BLANK) String slug,
@@ -197,7 +196,7 @@ public class ArticlesResource {
   @POST
   @Transactional
   @Path("/{slug}/favorite")
-  @Secured({Role.ADMIN, Role.USER})
+  @RolesAllowed({"USER", "ADMIN"})
   @Produces(MediaType.APPLICATION_JSON)
   public Response favoriteArticle(
       @PathParam("slug") @NotBlank(message = ValidationMessages.SLUG_MUST_BE_NOT_BLANK) String slug,
@@ -213,7 +212,7 @@ public class ArticlesResource {
   @DELETE
   @Transactional
   @Path("/{slug}/favorite")
-  @Secured({Role.ADMIN, Role.USER})
+  @RolesAllowed({"USER", "ADMIN"})
   @Produces(MediaType.APPLICATION_JSON)
   public Response unfavoriteArticle(
       @PathParam("slug") @NotBlank(message = ValidationMessages.SLUG_MUST_BE_NOT_BLANK) String slug,

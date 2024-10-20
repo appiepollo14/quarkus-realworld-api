@@ -1,11 +1,27 @@
 package org.example.realworldapi.infrastructure.web.mapper;
 
+import io.quarkus.security.ForbiddenException;
+import io.quarkus.security.UnauthorizedException;
 import jakarta.ws.rs.core.Response;
 import org.example.realworldapi.application.web.model.response.ErrorResponse;
 import org.example.realworldapi.domain.exception.*;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
 public class ExceptionMappers {
+
+  @ServerExceptionMapper
+  public Response unauthorized(UnauthorizedException e) {
+    return Response.ok(errorResponse("Unauthorized"))
+        .status(Response.Status.UNAUTHORIZED.getStatusCode())
+        .build();
+  }
+
+  @ServerExceptionMapper
+  public Response forbidden(ForbiddenException e) {
+    return Response.ok(errorResponse("Forbidden"))
+        .status(Response.Status.FORBIDDEN.getStatusCode())
+        .build();
+  }
 
   @ServerExceptionMapper
   public Response emailAlreadyExists(EmailAlreadyExistsException e) {
@@ -42,6 +58,10 @@ public class ExceptionMappers {
   @ServerExceptionMapper
   public Response modelValidation(ModelValidationException e) {
     return Response.ok(errorResponse(e)).status(422).build();
+  }
+
+  private ErrorResponse errorResponse(String e) {
+    return new ErrorResponse(e);
   }
 
   private ErrorResponse errorResponse(RuntimeException e) {
