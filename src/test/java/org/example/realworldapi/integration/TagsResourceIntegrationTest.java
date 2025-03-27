@@ -5,24 +5,29 @@ import static org.example.realworldapi.constants.TestConstants.API_PREFIX;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 
+import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 import org.apache.http.HttpStatus;
-import org.example.realworldapi.AbstractIntegrationTest;
+import org.example.realworldapi.util.IntegrationTestUtil;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
-public class TagsResourceIntegrationTest extends AbstractIntegrationTest {
+@TestTransaction
+public class TagsResourceIntegrationTest {
+
+  @Inject IntegrationTestUtil integrationTestUtil;
 
   private final String TAGS_PATH = API_PREFIX + "/tags";
 
   @Test
   public void givenExistentTags_whenExecuteGetTagsEndpoint_shouldReturnTagListWithStatusCode200() {
 
-    final var tag1 = createTagEntity("tag 1");
-    final var tag2 = createTagEntity("tag 2");
-    final var tag3 = createTagEntity("tag 3");
-    final var tag4 = createTagEntity("tag 4");
+    final var tag1 = integrationTestUtil.createTagEntity("tag 1");
+    final var tag2 = integrationTestUtil.createTagEntity("tag 2");
+    final var tag3 = integrationTestUtil.createTagEntity("tag 3");
+    final var tag4 = integrationTestUtil.createTagEntity("tag 4");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
