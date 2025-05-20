@@ -4,14 +4,19 @@ import static io.restassured.RestAssured.given;
 import static org.example.realworldapi.constants.TestConstants.*;
 import static org.hamcrest.Matchers.is;
 
+import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 import org.apache.http.HttpStatus;
-import org.example.realworldapi.AbstractIntegrationTest;
+import org.example.realworldapi.util.IntegrationTestUtil;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
-public class ProfilesResourceIntegrationTest extends AbstractIntegrationTest {
+@TestTransaction
+public class ProfilesResourceIntegrationTest {
+
+  @Inject IntegrationTestUtil integrationTestUtil;
 
   private final String PROFILES_PATH = API_PREFIX + "/profiles";
 
@@ -19,7 +24,8 @@ public class ProfilesResourceIntegrationTest extends AbstractIntegrationTest {
   public void
       givenExistentUser_whenExecuteGetProfileEndpointWithoutAuth_shouldReturnAUserProfile() {
 
-    final var existentUser = createUserEntity("user1", "user1@mail.com", "bio", "image", "user123");
+    final var existentUser =
+        integrationTestUtil.createUserEntity("user1", "user1@mail.com", "bio", "image", "user123");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
@@ -44,14 +50,18 @@ public class ProfilesResourceIntegrationTest extends AbstractIntegrationTest {
       givenExistentUserWithFollows_whenExecuteGetProfileEndpointWithAuth_shouldReturnAUserProfileWithFollowingTrue() {
 
     final var loggedUser =
-        createUserEntity("loggeduser", "loggeduser@mail.com", "bio", "image", "user123");
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+        integrationTestUtil.createUserEntity(
+            "loggeduser", "loggeduser@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
 
-    follow(loggedUser, user);
+    integrationTestUtil.follow(loggedUser, user);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .get(PROFILES_PATH + "/" + user.getUsername())
         .then()
         .statusCode(HttpStatus.SC_OK)
@@ -73,12 +83,16 @@ public class ProfilesResourceIntegrationTest extends AbstractIntegrationTest {
       givenExistentUserWithoutFollows_whenExecuteGetProfileEndpointWithAuth_shouldReturnAUserProfileWithFollowingFalse() {
 
     final var loggedUser =
-        createUserEntity("loggeduser", "loggeduser@mail.com", "bio", "image", "user123");
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+        integrationTestUtil.createUserEntity(
+            "loggeduser", "loggeduser@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .get(PROFILES_PATH + "/" + user.getUsername())
         .then()
         .statusCode(HttpStatus.SC_OK)
@@ -99,13 +113,17 @@ public class ProfilesResourceIntegrationTest extends AbstractIntegrationTest {
   public void
       givenExistentUsers_whenExecuteFollowEndpoint_shouldReturnProfileWithFollowingFieldTrue() {
 
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
     final var loggedUser =
-        createUserEntity("loggeduser", "loggeduser@mail.com", "bio", "image", "user123");
+        integrationTestUtil.createUserEntity(
+            "loggeduser", "loggeduser@mail.com", "bio", "image", "user123");
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .post(PROFILES_PATH + "/" + user.getUsername() + "/follow")
         .then()
         .statusCode(HttpStatus.SC_OK)
@@ -126,15 +144,19 @@ public class ProfilesResourceIntegrationTest extends AbstractIntegrationTest {
   public void
       givenExistentUserWithFollower_whenExecuteUnfollowEndpoint_shouldReturnProfileWithFollowingFieldFalse() {
 
-    final var user = createUserEntity("user", "user@mail.com", "bio", "image", "user123");
+    final var user =
+        integrationTestUtil.createUserEntity("user", "user@mail.com", "bio", "image", "user123");
     final var loggedUser =
-        createUserEntity("loggeduser", "loggeduser@mail.com", "bio", "image", "user123");
+        integrationTestUtil.createUserEntity(
+            "loggeduser", "loggeduser@mail.com", "bio", "image", "user123");
 
-    follow(loggedUser, user);
+    integrationTestUtil.follow(loggedUser, user);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .header(AUTHORIZATION_HEADER, AUTHORIZATION_HEADER_VALUE_PREFIX + token(loggedUser))
+        .header(
+            AUTHORIZATION_HEADER,
+            AUTHORIZATION_HEADER_VALUE_PREFIX + integrationTestUtil.token(loggedUser))
         .delete(PROFILES_PATH + "/" + user.getUsername() + "/follow")
         .then()
         .statusCode(HttpStatus.SC_OK)
