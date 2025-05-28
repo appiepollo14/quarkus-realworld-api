@@ -16,7 +16,7 @@
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <quarkus.platform.version>3.22.3</quarkus.platform.version>
         <surefire-plugin.version>3.5.3</surefire-plugin.version>
-        <spotless.version>2.44.4</spotless.version>
+        <spotless.version>2.44.5</spotless.version>
     </properties>
     <dependencyManagement>
         <dependencies>
