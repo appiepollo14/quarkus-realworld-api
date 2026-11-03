@@ -5,7 +5,6 @@ import jakarta.ws.rs.core.SecurityContext;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.example.realworldapi.application.web.model.response.*;
 import org.example.realworldapi.domain.feature.*;
@@ -71,9 +70,7 @@ public class ResourceUtils {
 
   public CommentsResponse commentsResponse(List<Comment> comments, UUID loggedUserId) {
     final var resultResponse =
-        comments.stream()
-            .map(comment -> commentResponse(comment, loggedUserId))
-            .toList();
+        comments.stream().map(comment -> commentResponse(comment, loggedUserId)).toList();
     return new CommentsResponse(resultResponse);
   }
 
