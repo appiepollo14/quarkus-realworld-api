@@ -34,11 +34,16 @@ public class ResourceUtils {
   }
 
   public ArticleResponse articleResponse(Article article, UUID loggedUserId) {
+    return articleResponse(article, loggedUserId, true);
+  }
+
+  private ArticleResponse articleResponse(Article article, UUID loggedUserId, boolean includeBody) {
     final var author = article.getAuthor();
     final var profileResponse = profileResponse(author.getUsername(), author.getId());
     final var tags = findArticleTags.handle(article);
     final var favoritesCount = articleFavoritesCount.handle(article.getId());
-    final var articleResponse = new ArticleResponse(article, profileResponse, favoritesCount, tags);
+    final var articleResponse =
+        new ArticleResponse(article, profileResponse, favoritesCount, tags, includeBody);
     if (loggedUserId != null) {
       articleResponse.setFavorited(isArticleFavorited.handle(article, loggedUserId));
     }
@@ -48,7 +53,7 @@ public class ResourceUtils {
   public ArticlesResponse articlesResponse(PageResult<Article> pageResult, UUID loggedUserId) {
     final var resultResponse =
         pageResult.getResult().stream()
-            .map(article -> articleResponse(article, loggedUserId))
+            .map(article -> articleResponse(article, loggedUserId, false))
             .collect(Collectors.toList());
     return new ArticlesResponse(resultResponse, pageResult.getTotal());
   }
