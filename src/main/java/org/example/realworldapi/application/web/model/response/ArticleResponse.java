@@ -1,6 +1,7 @@
 package org.example.realworldapi.application.web.model.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.time.LocalDateTime;
@@ -22,7 +23,10 @@ public class ArticleResponse {
   private String slug;
   private String title;
   private String description;
+
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String body;
+
   private List<String> tagList;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -36,11 +40,15 @@ public class ArticleResponse {
   private ProfileResponse author;
 
   public ArticleResponse(
-      Article article, ProfileResponse author, long favoritesCount, List<Tag> tags) {
+      Article article,
+      ProfileResponse author,
+      long favoritesCount,
+      List<Tag> tags,
+      boolean includeBody) {
     this.slug = article.getSlug();
     this.title = article.getTitle();
     this.description = article.getDescription();
-    this.body = article.getBody();
+    this.body = includeBody ? article.getBody() : null;
     this.createdAt = article.getCreatedAt();
     this.updatedAt = article.getUpdatedAt();
     this.author = author;

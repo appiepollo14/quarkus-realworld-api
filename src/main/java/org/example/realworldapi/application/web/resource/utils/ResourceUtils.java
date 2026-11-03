@@ -5,7 +5,6 @@ import jakarta.ws.rs.core.SecurityContext;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.example.realworldapi.application.web.model.response.*;
 import org.example.realworldapi.domain.feature.*;
@@ -34,11 +33,16 @@ public class ResourceUtils {
   }
 
   public ArticleResponse articleResponse(Article article, UUID loggedUserId) {
+    return articleResponse(article, loggedUserId, true);
+  }
+
+  private ArticleResponse articleResponse(Article article, UUID loggedUserId, boolean includeBody) {
     final var author = article.getAuthor();
     final var profileResponse = profileResponse(author.getUsername(), author.getId());
     final var tags = findArticleTags.handle(article);
     final var favoritesCount = articleFavoritesCount.handle(article.getId());
-    final var articleResponse = new ArticleResponse(article, profileResponse, favoritesCount, tags);
+    final var articleResponse =
+        new ArticleResponse(article, profileResponse, favoritesCount, tags, includeBody);
     if (loggedUserId != null) {
       articleResponse.setFavorited(isArticleFavorited.handle(article, loggedUserId));
     }
@@ -48,8 +52,8 @@ public class ResourceUtils {
   public ArticlesResponse articlesResponse(PageResult<Article> pageResult, UUID loggedUserId) {
     final var resultResponse =
         pageResult.getResult().stream()
-            .map(article -> articleResponse(article, loggedUserId))
-            .collect(Collectors.toList());
+            .map(article -> articleResponse(article, loggedUserId, false))
+            .toList();
     return new ArticlesResponse(resultResponse, pageResult.getTotal());
   }
 
@@ -66,9 +70,7 @@ public class ResourceUtils {
 
   public CommentsResponse commentsResponse(List<Comment> comments, UUID loggedUserId) {
     final var resultResponse =
-        comments.stream()
-            .map(comment -> commentResponse(comment, loggedUserId))
-            .collect(Collectors.toList());
+        comments.stream().map(comment -> commentResponse(comment, loggedUserId)).toList();
     return new CommentsResponse(resultResponse);
   }
 

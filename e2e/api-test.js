@@ -198,10 +198,10 @@ function testArticlesFavoriteComments() {
     expect(response.json('articles'), 'articles').to.be.an('array');
     expect(response.json('articlesCount'), 'articlesCount').to.be.a('number');
     expect(response.json('articlesCount'), 'articlesCount').to.equal(1);
-    expect(response.json('articles.0'), 'First article').to.include.keys('title', 'slug', 'body', 'createdAt', 'updatedAt', 'description', 'tagList', 'author', 'favorited', 'favoritesCount');
+    expect(response.json('articles.0'), 'First article').to.include.keys('title', 'slug', 'createdAt', 'updatedAt', 'description', 'tagList', 'author', 'favorited', 'favoritesCount');
     expect(response.json('articles.0.title'), 'title').to.equal('How to train your dragon')
     expect(response.json('articles.0.slug'), 'slug').to.equal(slug)
-    expect(response.json('articles.0.body'), 'body').to.equal('Very carefully.');
+    expect(response.json('articles.0'), 'First article').to.not.have.property('body');
     expect(response.json('articles.0.createdAt'), 'created at is an ISO 8601 timestamp').to.match(/^\d{4,}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+(?:[+-][0-2]\d:[0-5]\d|Z)$/)
     expect(response.json('articles.0.updatedAt'), 'updated at is an ISO 8601 timestamp').to.match(/^\d{4,}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+(?:[+-][0-2]\d:[0-5]\d|Z)$/)
     expect(response.json('articles.0.description'), 'description').to.equal('Ever wonder how?')
@@ -218,10 +218,10 @@ function testArticlesFavoriteComments() {
     expect(response.json('articles'), 'articles').to.be.an('array');
     expect(response.json('articlesCount'), 'articlesCount').to.be.a('number');
     expect(response.json('articlesCount'), 'articlesCount').to.equal(1);
-    expect(response.json('articles.0'), 'First article').to.include.keys('title', 'slug', 'body', 'createdAt', 'updatedAt', 'description', 'tagList', 'author', 'favorited', 'favoritesCount');
+    expect(response.json('articles.0'), 'First article').to.include.keys('title', 'slug', 'createdAt', 'updatedAt', 'description', 'tagList', 'author', 'favorited', 'favoritesCount');
     expect(response.json('articles.0.title'), 'title').to.equal('How to train your dragon')
     expect(response.json('articles.0.slug'), 'slug').to.equal(slug)
-    expect(response.json('articles.0.body'), 'body').to.equal('Very carefully.');
+    expect(response.json('articles.0'), 'First article').to.not.have.property('body');
     expect(response.json('articles.0.createdAt'), 'created at is an ISO 8601 timestamp').to.match(/^\d{4,}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+(?:[+-][0-2]\d:[0-5]\d|Z)$/)
     expect(response.json('articles.0.updatedAt'), 'updated at is an ISO 8601 timestamp').to.match(/^\d{4,}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+(?:[+-][0-2]\d:[0-5]\d|Z)$/)
     expect(response.json('articles.0.description'), 'description').to.equal('Ever wonder how?')
@@ -266,10 +266,10 @@ function testArticlesFavoriteComments() {
     expect(response.json('articlesCount'), 'articlesCount').to.be.a('number');
     expect(response.json('articlesCount'), 'articlesCount').to.equal(1);
     expect(response.json('articles.0'), 'Article').to.be.an('object');
-    expect(response.json('articles.0'), 'Article').to.include.keys('title', 'slug', 'body', 'createdAt', 'updatedAt', 'description', 'tagList', 'author', 'favorited', 'favoritesCount');
+    expect(response.json('articles.0'), 'Article').to.include.keys('title', 'slug', 'createdAt', 'updatedAt', 'description', 'tagList', 'author', 'favorited', 'favoritesCount');
     expect(response.json('articles.0.title'), 'title').to.equal('How to train your dragon')
     expect(response.json('articles.0.slug'), 'slug').to.equal(slug)
-    expect(response.json('articles.0.body'), 'body').to.equal('Very carefully.');
+    expect(response.json('articles.0'), 'Article').to.not.have.property('body');
     expect(response.json('articles.0.createdAt'), 'created at is an ISO 8601 timestamp').to.match(/^\d{4,}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+(?:[+-][0-2]\d:[0-5]\d|Z)$/)
     expect(response.json('articles.0.updatedAt'), 'updated at is an ISO 8601 timestamp').to.match(/^\d{4,}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d.\d+(?:[+-][0-2]\d:[0-5]\d|Z)$/)
     expect(response.json('articles.0.description'), 'description').to.equal('Ever wonder how?')
