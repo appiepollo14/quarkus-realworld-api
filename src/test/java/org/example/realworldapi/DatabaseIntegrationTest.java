@@ -29,18 +29,16 @@ public class DatabaseIntegrationTest {
     Reflections reflections = new Reflections("org.example.realworldapi");
     reflections
         .getTypesAnnotatedWith(Entity.class)
-        .forEach(
-            entity -> {
-              String tableName = entity.getAnnotation(Table.class).name();
-              entities.add(tableName);
-              configuration.addAnnotatedClass(entity);
-            });
+        .forEach(entity -> {
+          String tableName = entity.getAnnotation(Table.class).name();
+          entities.add(tableName);
+          configuration.addAnnotatedClass(entity);
+        });
   }
 
   @Transactional
   public void truncate() {
-    entities.forEach(
-        tableName ->
-            em.createNativeQuery("TRUNCATE TABLE " + tableName + " CASCADE;").executeUpdate());
+    entities.forEach(tableName ->
+        em.createNativeQuery("TRUNCATE TABLE " + tableName + " CASCADE;").executeUpdate());
   }
 }
