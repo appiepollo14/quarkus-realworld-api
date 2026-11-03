@@ -54,7 +54,7 @@ public class ResourceUtils {
     final var resultResponse =
         pageResult.getResult().stream()
             .map(article -> articleResponse(article, loggedUserId, false))
-            .collect(Collectors.toList());
+            .toList();
     return new ArticlesResponse(resultResponse, pageResult.getTotal());
   }
 
@@ -73,7 +73,7 @@ public class ResourceUtils {
     final var resultResponse =
         comments.stream()
             .map(comment -> commentResponse(comment, loggedUserId))
-            .collect(Collectors.toList());
+            .toList();
     return new CommentsResponse(resultResponse);
   }
 
